@@ -11,6 +11,11 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
+// var (
+// 	bundle    *i18n.Bundle
+// 	localizer *i18n.Localizer
+// )
+
 type Server struct {
 	DB     *gorm.DB
 	Router *mux.Router
