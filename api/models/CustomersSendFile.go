@@ -1,7 +1,9 @@
 package models
 
 import (
+	"errors"
 	"html"
+	"itjournal/configs"
 	"strings"
 	"time"
 
@@ -35,7 +37,31 @@ func (csf *CustomersSendFile) Prepare() {
 	csf.UpdatedAt = time.Now()
 }
 
-func (csf *CustomersSendFile) Validate() {
+func (csf *CustomersSendFile) Validate(action string) error {
+	switch action {
+	case "update":
+		return nil
+	default:
+		if csf.Topic == "" {
+			return errors.New(configs.MessageErrReq + "หัวข้อ")
+		}
+		if csf.Job == "" {
+			return errors.New(configs.MessageErrReq + "ตำแหน่ง")
+		}
+		if csf.GovSector == "" {
+			return errors.New(configs.MessageErrReq + "หน่วยงานราชการ")
+		}
+		if csf.Phone == "" {
+			return errors.New(configs.MessageErrReq + "เบอร์โทรศัพท์")
+		}
+		if csf.SendType == "" {
+			return errors.New(configs.MessageErrSelectReq + "ประเภทบทความที่ขอส่ง")
+		}
+		if csf.StatusSurety == "" {
+			return errors.New(configs.MessageErrSelectReq + "รับรองบทความ")
+		}
+		return nil
+	}
 }
 
 func (af *CustomersSendFile) CustomerSaveSendFile(db *gorm.DB) (*CustomersSendFile, error) {

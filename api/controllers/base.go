@@ -4,17 +4,13 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"path/filepath"
 
 	"github.com/gorilla/mux"
 	"github.com/jinzhu/gorm"
 
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
-
-// var (
-// 	bundle    *i18n.Bundle
-// 	localizer *i18n.Localizer
-// )
 
 type Server struct {
 	DB     *gorm.DB
@@ -25,7 +21,13 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 	var err error
 
 	if Dbdriver == "mysql" {
-		DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", DbUser, DbPassword, DbHost, DbPort, DbName)
+		DBURL := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+			DbUser,
+			DbPassword,
+			DbHost,
+			DbPort,
+			DbName,
+		)
 		server.DB, err = gorm.Open(Dbdriver, DBURL)
 		if err != nil {
 			fmt.Printf("Cannot connect to the %s database", Dbdriver)
@@ -41,5 +43,8 @@ func (server *Server) Initialize(Dbdriver, DbUser, DbPassword, DbPort, DbHost, D
 
 func (server *Server) Run(DbPort, addr string) {
 	fmt.Println("Listening to port" + DbPort)
-	log.Fatal(http.ListenAndServe(addr, server.Router))
+	pCrt, _ := filepath.Abs("./server.crt")
+	pKey, _ := filepath.Abs("./server.key")
+	// https://github.com/denji/golang-tls
+	log.Fatal(http.ListenAndServeTLS(addr, pCrt, pKey, server.Router))
 }

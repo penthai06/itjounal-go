@@ -41,6 +41,7 @@ func (cf *CustomersFile) CustomerUploadFile(r *http.Request) error {
 		fmt.Println("We are getting the env values")
 	}
 	maxUploadSize, _ := strconv.ParseInt(os.Getenv("MAX_UPLOAD_SIZE"), 10, 64)
+	maxUploadSize = maxUploadSize * 1024
 	// Visit tutor https://github.com/Freshman-tech/file-upload/blob/master/main.go
 	fileNameGen, _ := utils.RandomFilename(16) // 32 char
 
@@ -101,7 +102,7 @@ func (cf *CustomersFile) CustomerUploadFile(r *http.Request) error {
 
 	var fileDocName string
 	var fileDocOriginal string
-	for _, fileHeader := range filePdf {
+	for _, fileHeader := range fileDoc {
 		if fileHeader.Size > maxUploadSize {
 			return errors.New("อัพโหลดไฟล์ DOC ขนาดไม่เกิน 30MB")
 		}

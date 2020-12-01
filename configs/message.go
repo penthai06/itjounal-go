@@ -1,5 +1,6 @@
 package configs
 
 const (
-	MessageErrReq = "กรุณากรอก "
+	MessageErrReq       = "กรุณากรอก "
+	MessageErrSelectReq = "กรุณาเลือก "
 )

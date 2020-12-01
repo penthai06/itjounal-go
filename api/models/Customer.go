@@ -20,7 +20,7 @@ type Customer struct {
 	Lname        string    `json:"lname"`
 	Phone        string    `json:"phone"`
 	RefreshToken string    `json:"refresh_token"`
-	Status       int       `json:"status"`
+	Status       string    `json:"status"`
 	Job          string    `json:"job"`
 	Sector       string    `json:"sector"`
 	CreatedAt    time.Time `json:"created_at"`
